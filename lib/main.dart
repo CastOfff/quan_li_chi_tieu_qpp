@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/calender_screen.dart';
+import 'package:quan_li_chi_tieu_ca_nhan/page/home_page.dart';
+import 'package:quan_li_chi_tieu_ca_nhan/page/note_page.dart';
 
-import 'package:quan_li_chi_tieu_ca_nhan/page/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,18 +27,23 @@ class MyApp extends StatelessWidget {
             backgroundColor: Color(0xfff8eff8)
           ),
         textTheme: const TextTheme(
+          titleMedium: TextStyle(
+            color: Colors.black87,
+            fontSize: 18,
+            fontWeight: FontWeight.w300,
+          ),
           bodySmall: TextStyle(
             color: Colors.red,
             fontSize: 10,
           )
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white60,
           selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.black45
         )
       ),
-      home: CalenderScreen(),
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

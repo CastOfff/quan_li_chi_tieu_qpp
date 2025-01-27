@@ -12,7 +12,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime today = DateTime.now();
   DateTime? _selectedDay;
-  int currentPage = 0;
+
   final Map<DateTime, List<String>> _events = {
     DateTime(2025, 1, 27): ['100'],
     DateTime(2025, 2, 5): ['200'],
@@ -39,7 +39,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
             child: TableCalendar(
                 focusedDay: today,
                 firstDay: DateTime.utc(2025),
-                lastDay: DateTime(2030),
+                lastDay: DateTime(2026),
               headerVisible: true,
               calendarFormat: _calendarFormat,
 
@@ -92,7 +92,6 @@ class _CalenderScreenState extends State<CalenderScreen> {
               ),
             ),
           ),
-
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -124,31 +123,6 @@ class _CalenderScreenState extends State<CalenderScreen> {
               ],
             ),
           )
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        iconSize: 30,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        onTap: (value) {
-          setState(() {
-            currentPage = value;
-          });
-        },
-        currentIndex: currentPage,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.pending_actions),
-              label: 'Nhập'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month_outlined),
-              label: 'Lịch'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.pie_chart),
-              label: 'báo cáo'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.more_horiz_outlined),
-              label: 'khác'),
         ],
       ),
     );
