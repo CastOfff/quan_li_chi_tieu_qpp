@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quan_li_chi_tieu_ca_nhan/data/cash_flow_data.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalenderScreen extends StatefulWidget {
@@ -12,17 +13,36 @@ class _CalenderScreenState extends State<CalenderScreen> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime today = DateTime.now();
   DateTime? _selectedDay;
-
-  final Map<DateTime, List<String>> _events = {
-    DateTime(2025, 1, 27): ['100'],
-    DateTime(2025, 2, 5): ['200'],
-    DateTime(2025, 2, 10): ['300'],
-  };
-
+  Map<String, int> selected = {'Income': 0, 'Expense': 0};
+  final List<Map<String, dynamic>> _events = CashFlowData;
+  late int sum = 0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    setState(() {
+      _selectedDay = selectedDay;
+      today = focusedDay;
+
+      // Tìm sự kiện phù hợp với ngày được chọn
+      final event = _events.firstWhere(
+            (event) {
+          final eventDate = event['Date'] as DateTime;
+          return eventDate.year == selectedDay.year &&
+              eventDate.month == selectedDay.month &&
+              eventDate.day == selectedDay.day;
+        },
+        orElse: () => {'Income': 0, 'Expense': 0}, // Nếu không tìm thấy, trả về giá trị mặc định
+      );
+
+      // Cập nhật giá trị selected
+      selected['Income'] = event['Income'];
+      selected['Expense'] = event['Expense'];
+
+      sum = selected['Income']! - selected['Expense']!;
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -47,12 +67,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 return isSameDay(_selectedDay, day);
               },
 
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  today = focusedDay;
-                });
-              },
+              onDaySelected: _onDaySelected,
 
               onFormatChanged: (format) {
                 setState(() {
@@ -64,34 +79,42 @@ class _CalenderScreenState extends State<CalenderScreen> {
                     today = focusedDay;
                   });
               },
-              // eventLoader: (day) {
-              //   return _events[day] ?? [];
-              // },
-              calendarBuilders: CalendarBuilders(
-                // TODO: điều chỉnh sự kiện trong ô ngày
-                defaultBuilder: (context, day, forcusedDay) {
-                  final normalizedDay = DateTime(day.year, day.month, day.day);
-                  final events = _events[normalizedDay] ?? [];
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${day.day}',
-                        //style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      if (events.isNotEmpty)
-                        ...events.map((events)
-                        => Text(
-                            '$events.000',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        ).toList(),
-                    ],
-                  );
-                }
-              ),
+              // calendarBuilders: CalendarBuilders(
+              //   // TODO: điều chỉnh sự kiện trong ô ngày
+              //   defaultBuilder: (context, day, forcusedDay) {
+              //     final normalizedDay = DateTime(day.year, day.month, day.day);
+              //     final events = _events.where((event) {
+              //       final eventDate = event['Date'] as DateTime; // Lấy ngày từ sự kiện
+              //       return eventDate.year == normalizedDay.year &&
+              //           eventDate.month == normalizedDay.month &&
+              //           eventDate.day == normalizedDay.day;
+              //     }).map((event) {
+              //       return {
+              //         'Income': event['Income'],
+              //         'Expense': event['Expense'],
+              //       };
+              //     }).toList();
+              //     return Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Text(
+              //           '${day.day}',
+              //           //style: Theme.of(context).textTheme.bodySmall,
+              //         ),
+              //         if (events.isNotEmpty)
+              //           ...events.map((events)
+              //           => Text(
+              //               '$events.000',
+              //             style: Theme.of(context).textTheme.bodySmall,
+              //           ),
+              //           ).toList(),
+              //       ],
+              //     );
+              //   }
+              // ),
             ),
           ),
+
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -105,19 +128,34 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 Column(
                   children: [
                     const Text('Tiền thu'),
-                    Text('money')
+                    Text('${selected['Income']}₫',
+                      style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                        color: Colors.blue
+                    ),)
                   ],
                 ),
                 Column(
                   children: [
                     const Text('Tiền chi'),
-                    Text('money')
+                    Text('${selected['Expense']}₫',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red
+                      ),)
                   ],
                 ),
                 Column(
                   children: [
                     const Text('Tổng'),
-                    Text('money')
+                    Text('$sum₫',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: sum > 0 ? Colors.blue : Colors.red
+                      ),)
                   ],
                 ),
               ],
