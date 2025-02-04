@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'data/cash_flow_data.dart';
+
 class CategoryItem extends StatefulWidget {
-  final String category;
+  final CategoryType category;
   final Icon categoryIcon;
   final Color frameColor;
   final VoidCallback onTap;
@@ -48,7 +50,7 @@ class _CategoryItemState extends State<CategoryItem> {
                 height: 8,
               ),
               Text(
-                widget.category,
+                widget.category.description,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,

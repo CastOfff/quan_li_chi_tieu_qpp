@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:quan_li_chi_tieu_ca_nhan/page/calender_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/home_page.dart';
-import 'package:quan_li_chi_tieu_ca_nhan/page/note_page.dart';
+import 'data/cash_flow_provider.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => CashFlowProvider()),
+    ],
+    child: const MyApp(),
+  ),);
 }
 
 class MyApp extends StatelessWidget {

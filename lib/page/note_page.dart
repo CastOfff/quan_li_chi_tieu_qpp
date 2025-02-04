@@ -54,8 +54,8 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
           Expanded(child: TabBarView(
             controller: _tabController,
             children: const [
-              MoneyIncomePage(),
-              MoneyEarnedPage(),
+              MoneyExpensePage(),
+              MoneyIncomePage()
             ],
           ),)
         ],
