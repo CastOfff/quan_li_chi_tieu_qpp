@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarWidget extends StatelessWidget {
-  final DateTime today;
+  final DateTime focusDay;
   final DateTime? selectedDay;
   final CalendarFormat calendarFormat;
   final Function(DateTime, DateTime) onDaySelected;
@@ -11,7 +11,7 @@ class CalendarWidget extends StatelessWidget {
 
   const CalendarWidget({
     Key? key,
-    required this.today,
+    required this.focusDay,
     required this.selectedDay,
     required this.calendarFormat,
     required this.onDaySelected,
@@ -19,12 +19,12 @@ class CalendarWidget extends StatelessWidget {
     required this.onPageChanged,
   }) : super(key: key);
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       child: TableCalendar(
-        focusedDay: today,
+        focusedDay: selectedDay??focusDay,
         firstDay: DateTime.utc(2025),
         lastDay: DateTime(2026),
         headerVisible: true,

@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.black45
         )
       ),
-      home: HomePage(),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

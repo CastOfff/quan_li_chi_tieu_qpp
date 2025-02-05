@@ -84,10 +84,10 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
 
     int? intValue = int.tryParse(textValue);
 
-    if (intValue != null) {
+    if (intValue == null) {
       return 0;
     } else {
-      return intValue?.toInt();
+      return intValue.toInt();
     }
   }
 
@@ -286,25 +286,50 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
           ),
           Expanded(
             flex: 2,
-              child: GestureDetector(
-                onTap: () {
-                  _saveTransaction(context);
-                },
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(8),
-                  child: Center(
-                    child: Text(
-                      'Xác nhận',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Ink(
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
                     color: Colors.deepOrange,
-                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    splashColor: Colors.red,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                        return AlertDialog(
+                          title: Text('Thông báo'),
+                          content: Text('Bạn chắc chắn muốn thêm giao dịch này?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }, child: const Text('Hủy'),
+                          ),
+                            TextButton(
+                              onPressed: () {
+                                _saveTransaction(context);
+                                Navigator.pop(context);
+                                /// đặt
+                              },
+                              child: Text('Xác nhận'),
+                          )
+                          ]
+                        );
+                      },
+                      );
+                    },
+                    child: Center(
+                      child: Text(
+                        'Xác nhận',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),),
+                    ),
                   ),
                 ),
               ),

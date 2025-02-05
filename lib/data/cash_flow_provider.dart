@@ -23,7 +23,13 @@ class CashFlowProvider extends ChangeNotifier {
     // Thêm giao dịch vào danh sách
     cashFlowData.addCashFlowData(newTransaction);
 
+    cashFlowData.
     // Thông báo cho các listener rằng dữ liệu đã thay đổi
+    notifyListeners();
+  }
+
+  void removeTransaction(CashFlowData transaction) {
+    cashFlowData.removeCashFlowData(transaction);
     notifyListeners();
   }
 }

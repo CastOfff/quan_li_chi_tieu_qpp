@@ -1,48 +1,3 @@
-/*
-List<Map<String, dynamic>> CashFlowData = [
-  {
-    'Date': DateTime(2025, 1, 30),
-    'Income': [
-      {'Amount': 200000, 'Category': 'Ăn uống'},
-      {'Amount': 150000, 'Category': 'Chi tiêu'},
-      {'Amount': 200000, 'Category': 'Ăn uống'}
-    ]
-    ,
-    'Expense': [
-      {'Amount': 200000, 'Category': 'Quần áo'},
-      {'Amount': 100000, 'Category': 'Mỹ phẩm'},
-      {'Amount': 200000, 'Category': 'Chi tiêu'}
-    ]
-  },
-  {
-    'Date': DateTime(2025, 2, 1),
-    'Income': [
-      {'Amount': 50000, 'Category': 'Mỹ phẩm'},
-      {'Amount': 250000, 'Category': 'Chi tiêu'},
-      {'Amount': 100000, 'Category': 'Ăn uống'}
-    ],
-    'Expense': [
-      {'Amount': 200000, 'Category': 'Mỹ phẩm'},
-      {'Amount': 200000, 'Category': 'Chi tiêu'},
-      {'Amount': 200000, 'Category': 'Chi tiêu'}
-    ]
-  },
-  {
-    'Date': DateTime(2025, 2, 2),
-    'Income': [
-      {'Amount': 250000, 'Category': 'Mỹ phẩm'},
-      {'Amount': 50000, 'Category': 'Mỹ phẩm'},
-      {'Amount': 50000, 'Category': 'Ăn uống'}
-    ],
-    'Expense': [
-      {'Amount': 200000, 'Category': 'Ăn uống'},
-      {'Amount': 200000, 'Category': 'Quần áo'},
-      {'Amount': 200000, 'Category': 'Mỹ phẩm'}
-    ]
-  }
-];
-*/
-
 import 'package:flutter/material.dart';
 
 enum CategoryType {
@@ -57,8 +12,13 @@ enum CategoryType {
   transport('Đi lại'),
   internet('Mạng'),
   rent('Tiền nhà'),
-  entertainment('Giải trí');
-
+  entertainment('Giải trí'),
+  salary('Tiền lương'),
+  allowance('Tiền phụ cấp'),
+  bonus('Tiền thưởng '),
+  investment('Đầu tư'),
+  sideIncome('Thu nhập phụ'),
+  temporaryIncome('Thu nhập tạm thời');
   final String description;
   const CategoryType(this.description);
 }
@@ -70,6 +30,15 @@ class ListData extends ChangeNotifier{
   void addCashFlowData(CashFlowData cashFlowData) {
     data.add(cashFlowData);
   }
+
+  void removeCashFlowData(CashFlowData cashFlowData){
+    data.removeWhere((element) => element == cashFlowData);
+  }
+}
+
+enum Transactions {
+  income,
+  expense,
 }
 
 class CashFlowData {

@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quan_li_chi_tieu_ca_nhan/data/cash_flow_provider.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/calender_screen.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/note_page.dart';
+import 'package:quan_li_chi_tieu_ca_nhan/page/report_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +16,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Widget> pages = const[
     NotePage(),
-    CalenderScreen()
+    CalenderScreen(),
+    ReportPage()
   ];
   int currentPage = 0;
   @override

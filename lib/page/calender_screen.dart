@@ -21,14 +21,26 @@ class _CalenderScreenState extends State<CalenderScreen> {
   DateTime? _selectedDay;
   Map<String, int> selected = {'Income': 0, 'Expense': 0};
   late int sum = 0;
-  final CalendarLogic _calendarLogic = CalendarLogic(listData: data);
-  late List<dynamic> incomeTransactions = [];
-  late List<dynamic> expenseTransactions = [];
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    setState(() {
-      _selectedDay = selectedDay;
-      today = focusedDay;
+  late final CalendarLogic _calendarLogic;
+  List<CashFlowData> incomeTransactions = [];
+  List<CashFlowData> expenseTransactions = [];
 
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<CashFlowProvider>(context, listen: false);
+      _calendarLogic = CalendarLogic(listData: provider.cashFlowData);
+      _onDaySelected(
+        DateTime.now(),
+      );
+    });
+    super.initState();
+  }
+
+  void _onDaySelected(
+    DateTime selectedDay,
+  ) {
+    setState(() {
       final event = _calendarLogic.getEventsForDay(selectedDay);
 
       selected['Income'] = event['Income']!;
@@ -37,121 +49,168 @@ class _CalenderScreenState extends State<CalenderScreen> {
       sum = selected['Income']! - selected['Expense']!;
 
       // Lấy mảng Income hoặc Expense
-      incomeTransactions = _calendarLogic.getTransactionsForDay(selectedDay, 'Income');
-      expenseTransactions = _calendarLogic.getTransactionsForDay(selectedDay, 'Expense');
-
+      incomeTransactions = _calendarLogic.getTransactionsForDay(
+          selectedDay, Transactions.income);
+      expenseTransactions = _calendarLogic.getTransactionsForDay(
+          selectedDay, Transactions.expense);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff8eff8),
-      appBar: AppBar(
-        centerTitle: false,
-        title: const Text('Thu chi theo ngày'),
-      ),
-      body: Column(
-        children: [
-          CalendarWidget(
-            today: today,
-            selectedDay: _selectedDay,
-            calendarFormat: _calendarFormat,
-            onDaySelected: _onDaySelected,
-            onFormatChanged: (format) {
-              setState(() {
-                _calendarFormat = format;
-              });
-            },
-            onPageChanged: (focusedDay) {
-              setState(() {
-                today = focusedDay;
-              });
-            },
+    return Consumer(
+      builder: (context, _ , child) {
+        return Scaffold(
+          backgroundColor: const Color(0xfff8eff8),
+          appBar: AppBar(
+            centerTitle: false,
+            title: const Text('Thu chi theo ngày'),
           ),
-          SummaryWidget(
-            income: selected['Income']!,
-            expense: selected['Expense']!,
-            sum: sum,
-          ),
-          Expanded(
-            child: Text('Danh sách thu', style: Theme.of(context).textTheme.titleMedium,),
-            flex: 1,
-          ),
-          Expanded(
-            flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: ListView.builder(
-                itemCount: incomeTransactions.length,
-                itemBuilder: (context, index) {
-                  final transaction = incomeTransactions[index];
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          '${transaction['Category']}:',
-                        style: TextStyle(
-                          color: Colors.brown,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '${transaction['Amount']}₫',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+          body: SingleChildScrollView(
+            child: Column(
+              // mainAxisSize: MainAxisSize.max,
+              children: [
+                CalendarWidget(
+                  focusDay: today,
+                  selectedDay: _selectedDay ?? today,
+                  calendarFormat: _calendarFormat,
+                  onDaySelected: (_, date) {
+                    _selectedDay = date;
+                    _onDaySelected(_selectedDay ?? DateTime.now());
+                  },
+                  onFormatChanged: (format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  },
+                  onPageChanged: (focusedDay) {
+                    setState(() {
+                      today = focusedDay;
+                    });
+                  },
+                ),
+                SummaryWidget(
+                  income: selected['Income']!,
+                  expense: selected['Expense']!,
+                  sum: sum,
+                ),
+                if (incomeTransactions.isNotEmpty)
+                  Text(
+                    'Danh sách thu',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: incomeTransactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = incomeTransactions[index];
+                      return Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${transaction.category.description}:',
+                              style: const TextStyle(
+                                color: Colors.brown,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '${transaction.amount}₫',
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          removeIcon(context, transaction,),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                if (expenseTransactions.isNotEmpty)
+                  Text(
+                    'Danh sách chi',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: expenseTransactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = expenseTransactions[index];
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${transaction.category.description}:',
+                              style: const TextStyle(
+                                color: Colors.brown,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '${transaction.amount}₫',
+                            style: const TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          removeIcon(context, transaction,),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-          Expanded(
-            child: Text('Danh sách chi', style: Theme.of(context).textTheme.titleMedium,),
-            flex: 1,
-          ),
-          Expanded(
-            flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: ListView.builder(
-                itemCount: expenseTransactions.length,
-                itemBuilder: (context, index) {
-                  final transaction = expenseTransactions[index];
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    
-                    children: [
-                      Text(
-                        '${transaction['Category']}:',
-                        style: TextStyle(
-                          color: Colors.brown,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '${transaction['Amount']}₫',
-                        style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
+Widget removeIcon(
+    BuildContext context, CashFlowData transaction,) {
+  return IconButton(
+    onPressed: () {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Thông báo'),
+              content: Text('Bạn chắc chắn muốn xóa giao dịch này?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Hủy'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Provider.of<CashFlowProvider>(context, listen: false).removeTransaction(transaction);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Xóa"),
+                ),
+              ],
+            );
+          });
+      // provider.removeTransaction(transaction);
+    },
+    icon: const Icon(Icons.delete, color: Color(0xff743a3a)),
+  );
+}
