@@ -120,7 +120,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
   }
 
   void _saveTransaction(BuildContext context) {
-    final provider = Provider.of<CashFlowProvider>(context, listen: true);
+    final provider = Provider.of<CashFlowProvider>(context, listen: false);
     provider.addTransaction(
       date: DateTime(int.parse(year), int.parse(month), int.parse(day)),
       isIncome: true,
@@ -145,7 +145,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
                       style: Theme.of(context).textTheme.titleMedium,
                     )),
                 Expanded(
-                  flex: 5,
+                  flex: 4,
                   child: Container(
                     padding: const EdgeInsets.only(right: 20, left: 20),
                     decoration: BoxDecoration(
@@ -159,7 +159,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
                       enableInteractiveSelection: false,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(top: 14.0),
+                        contentPadding: const EdgeInsets.only(top: 14.0),
                         suffixIcon: GestureDetector(
                           onTap: _selectDate,
                           child: const Icon(
@@ -183,7 +183,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
             endIndent: 20,
           ),
           Padding(
-            padding: EdgeInsets.only(right: 20, left: 20),
+            padding: const EdgeInsets.only(right: 20, left: 20),
             child: Row(
               children: [
                 Expanded(
@@ -193,12 +193,12 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
                       style: Theme.of(context).textTheme.titleMedium,
                     )),
                 Expanded(
-                  flex: 5,
+                  flex: 4,
                   child: Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
+                    padding: const EdgeInsets.only(right: 20, left: 20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xfffff1ec),
+                      color: const Color(0xfffff1ec),
                     ),
                     width: 300,
                     child: TextFormField(
@@ -233,7 +233,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
                       style: Theme.of(context).textTheme.titleMedium,
                     )),
                 Expanded(
-                  flex: 9,
+                  flex: 7,
                   child: Container(
                     padding: const EdgeInsets.only(right: 20, left: 20),
                     decoration: BoxDecoration(
@@ -254,13 +254,11 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
                     ),
                   ),
                 ),
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'đ',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                    ),
+                const Text(
+                  'đ',
+                  style: TextStyle(
+                    fontSize: 20,
+                    decoration: TextDecoration.underline,
                   ),
                 )
               ],
@@ -283,7 +281,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
           Expanded(
             flex: 8,
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 2.0,
                 mainAxisSpacing: 2.0,
@@ -322,7 +320,7 @@ class _MoneyIncomePageState extends State<MoneyIncomePage> {
                   onTap: () {
                     _saveTransaction(context);
                   },
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'Xác nhận',
                       style: TextStyle(

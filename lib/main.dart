@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:quan_li_chi_tieu_ca_nhan/data/cash_flow_data.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/home_page.dart';
 import 'data/cash_flow_provider.dart';
 
@@ -9,7 +11,7 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => CashFlowProvider()),
     ],
-    child: const MyApp(),
+    child: MyApp(),
   ),);
 }
 
@@ -48,7 +50,10 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.black45
         )
       ),
-      home: const HomePage(),
+      home: HomePage(),
+      localizationsDelegates: const [
+        MonthYearPickerLocalizations.delegate, // Bắt buộc để hỗ trợ đa ngôn ngữ
+      ],
       debugShowCheckedModeBanner: false,
     );
   }

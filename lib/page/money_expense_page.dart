@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/data/cash_flow_data.dart';
@@ -116,7 +115,7 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                     flex: 1,
                     child: Text('Ngày', style: Theme.of(context).textTheme.titleMedium,)),
                 Expanded(
-                  flex: 5,
+                  flex: 4,
                   child: Container(
                     padding: const EdgeInsets.only(
                         right: 20,
@@ -133,7 +132,7 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                       enableInteractiveSelection: false,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(top: 14.0),
+                        contentPadding: const EdgeInsets.only(top: 14.0),
                         suffixIcon: GestureDetector(
                           onTap: _selectDate,
                           child: const Icon(
@@ -157,7 +156,7 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
             endIndent: 20,
           ),
           Padding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
                 right: 20,
                 left: 20
             ),
@@ -167,15 +166,15 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                     flex: 1,
                     child: Text('Ghi chú', style: Theme.of(context).textTheme.titleMedium,)),
                 Expanded(
-                  flex: 5,
+                  flex: 4,
                   child: Container(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         right: 20,
                         left: 20
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xfffff1ec),
+                      color: const Color(0xfffff1ec),
                     ),
                     width: 300,
                     child: TextFormField(
@@ -209,7 +208,7 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                     flex: 2,
                     child: Text('Tiền chi', style: Theme.of(context).textTheme.titleMedium,)),
                 Expanded(
-                  flex: 9,
+                  flex: 7,
                   child: Container(
                     padding: const EdgeInsets.only(
                         right: 20,
@@ -233,13 +232,11 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                     ),
                   ),
                 ),
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'đ',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                    ),
+                const Text(
+                  'đ',
+                  style: TextStyle(
+                    fontSize: 20,
+                    decoration: TextDecoration.underline,
                   ),
                 )
               ],
@@ -259,7 +256,7 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
           Expanded(
             flex: 8,
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 2.0,
                 mainAxisSpacing: 2.0,
@@ -301,8 +298,8 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                         context: context,
                         builder: (context) {
                         return AlertDialog(
-                          title: Text('Thông báo'),
-                          content: Text('Bạn chắc chắn muốn thêm giao dịch này?'),
+                          title: const Text('Thông báo'),
+                          content: const Text('Bạn chắc chắn muốn thêm giao dịch này?'),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -315,14 +312,14 @@ class _MoneyExpensePageState extends State<MoneyExpensePage> {
                                 Navigator.pop(context);
                                 /// đặt
                               },
-                              child: Text('Xác nhận'),
+                              child: const Text('Xác nhận'),
                           )
                           ]
                         );
                       },
                       );
                     },
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Xác nhận',
                         style: TextStyle(

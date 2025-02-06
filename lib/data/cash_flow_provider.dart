@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'cash_flow_data.dart';
 
 class CashFlowProvider extends ChangeNotifier {

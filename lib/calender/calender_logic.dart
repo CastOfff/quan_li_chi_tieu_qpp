@@ -5,6 +5,7 @@ class CalendarLogic {
   final ListData listData;
 
   CalendarLogic({required this.listData});
+
   Map<String, int> getEventsForDay(DateTime selectedDay) {
     final eventsForDay = listData.data.where((cashFlow) =>
     cashFlow.date.year == selectedDay.year &&
@@ -121,4 +122,26 @@ class CalendarLogic {
         cashFlow.date.month == selectedDay.month).toList();
   }
 
+  /// Tính Tổng thu chi trong tháng
+  Map<String, int> calculateMonthlyCashFlow(ListData listData, DateTime selectedMonth){
+    int income = 0;
+    int expense = 0;
+    int balance = 0;
+    for (var entry in listData.data) {
+      if (entry.date.year == selectedMonth.year && entry.date.month == selectedMonth.month) {
+        if (entry.isIncome == true) {
+          income += entry.amount!;
+        }
+        else {
+          expense += entry.amount!;
+        }
+      }
+      balance = income - expense;
+    }
+    return {
+      'Income': income,
+      'Expense': expense,
+      'Balance': balance,
+    };
+  }
 }

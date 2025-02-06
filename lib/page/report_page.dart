@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../calender/calender_logic.dart';
@@ -21,7 +19,7 @@ class _ReportPageState extends State<ReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Báo cáo'),
+        title: const Text('Báo cáo'),
       ),
       body:Column(
         children: [
@@ -84,12 +82,16 @@ class PieChartSample1State extends State {
     );
 
     if (picked != null && picked != currentDate) {
-      setState(() {
-        _getDateTime(picked);
-        _dateController.text = '$month/$year';
-        getData();
-      });
+      refresh();
     }
+  }
+
+  void refresh({DateTime? picked}) {
+    setState(() {
+      _getDateTime(picked??DateTime.now());
+      _dateController.text = '$month/$year';
+      getData();
+    });
   }
 
   void getData() {
@@ -124,15 +126,20 @@ class PieChartSample1State extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          monthBox(),
-          pieChart(),
-          dataField(),
-        ],
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            monthBox(),
+            pieChart(),
+            dataField(),
+          ],
+        ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        refresh();
+      },child: const Icon(Icons.refresh),),
     );
   }
 

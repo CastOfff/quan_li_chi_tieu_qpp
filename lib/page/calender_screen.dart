@@ -24,16 +24,14 @@ class _CalenderScreenState extends State<CalenderScreen> {
   late final CalendarLogic _calendarLogic;
   List<CashFlowData> incomeTransactions = [];
   List<CashFlowData> expenseTransactions = [];
+  final provider = CashFlowProvider();
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<CashFlowProvider>(context, listen: false);
-      _calendarLogic = CalendarLogic(listData: provider.cashFlowData);
-      _onDaySelected(
-        DateTime.now(),
-      );
-    });
+    _calendarLogic = CalendarLogic(listData: provider.cashFlowData);
+    _onDaySelected(
+      DateTime.now(),
+    );
     super.initState();
   }
 
@@ -58,8 +56,8 @@ class _CalenderScreenState extends State<CalenderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, _ , child) {
+    return Consumer<CashFlowProvider>(
+      builder: (context, provider, child) {
         return Scaffold(
           backgroundColor: const Color(0xfff8eff8),
           appBar: AppBar(
@@ -128,7 +126,10 @@ class _CalenderScreenState extends State<CalenderScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          removeIcon(context, transaction,),
+                          removeIcon(
+                            context,
+                            transaction,
+                          ),
                         ],
                       );
                     },
@@ -167,7 +168,10 @@ class _CalenderScreenState extends State<CalenderScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          removeIcon(context, transaction,),
+                          removeIcon(
+                            context,
+                            transaction,
+                          ),
                         ],
                       );
                     },
@@ -180,37 +184,46 @@ class _CalenderScreenState extends State<CalenderScreen> {
       },
     );
   }
-}
 
-Widget removeIcon(
-    BuildContext context, CashFlowData transaction,) {
-  return IconButton(
-    onPressed: () {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Thông báo'),
-              content: Text('Bạn chắc chắn muốn xóa giao dịch này?'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Hủy'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Provider.of<CashFlowProvider>(context, listen: false).removeTransaction(transaction);
-                    Navigator.pop(context);
-                  },
-                  child: Text("Xóa"),
-                ),
-              ],
-            );
-          });
-      // provider.removeTransaction(transaction);
-    },
-    icon: const Icon(Icons.delete, color: Color(0xff743a3a)),
-  );
+  Widget removeIcon(
+      BuildContext context,
+      CashFlowData transaction,
+      ) {
+    return IconButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Thông báo'),
+                content: Text('Bạn chắc chắn muốn xóa giao dịch này?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Hủy'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Provider.of<CashFlowProvider>(context, listen: false)
+                          .removeTransaction(transaction);
+                      _onDaySelected(_selectedDay ?? DateTime.now());
+                      Navigator.pop(context);
+                    },
+                    child: Text("Xóa"),
+                  ),
+                ],
+              );
+            });
+        // provider.removeTransaction(transaction);
+      },
+      icon: const Icon(
+        Icons.delete,
+        color: Color(0xff743a3a),
+        size: 20,
+      ),
+    );
+  }
+
 }
