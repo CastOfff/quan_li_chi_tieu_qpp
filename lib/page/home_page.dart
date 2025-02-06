@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quan_li_chi_tieu_ca_nhan/data/cash_flow_provider.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/calender_screen.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/note_page.dart';
-import 'package:quan_li_chi_tieu_ca_nhan/page/report_page.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/page/report_page_second.dart';
 
 class HomePage extends StatefulWidget {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quan_li_chi_tieu_ca_nhan/calender/calender_logic.dart';
 
+import '../data/cash_flow_data.dart';
 import '../data/cash_flow_provider.dart';
 
 class ReportPageSecond extends StatefulWidget {
@@ -19,6 +20,7 @@ class _ReportPageSecondState extends State<ReportPageSecond> {
   int balance = 0;
   final provider = CashFlowProvider();
   late final calendarLogic;
+  Map<CategoryType, Map<String, int>> categorySummary = {};
 
   @override
   void initState() {
@@ -32,6 +34,8 @@ class _ReportPageSecondState extends State<ReportPageSecond> {
     setState(() {
       selectedMonth = newMonth;
       final monthlyCashFlow = calendarLogic.calculateMonthlyCashFlow(
+          provider.cashFlowData, selectedMonth);
+      categorySummary = calendarLogic.calculateMonthCategory(
           provider.cashFlowData, selectedMonth);
       totalIncome = monthlyCashFlow['Income']!;
       totalExpense = monthlyCashFlow['Expense']!;
@@ -55,19 +59,18 @@ class _ReportPageSecondState extends State<ReportPageSecond> {
                   onMonthChanged: updateFocusedMonth,
                 ),
                 Text('month: ${selectedMonth.month}'),
-                Text(
-                    'lastest expense: ${provider.cashFlowData.data[provider.cashFlowData.data.length - 1].amount}'),
+                //Text('lastest expense: ${provider.cashFlowData.data[provider.cashFlowData.data.length - 1].amount}'),
                 Text('totalIncome: $totalIncome'),
                 Text('totalExpense: $totalExpense'),
-                Text('balance: $balance')
+                Text('balance: $balance'),
               ],
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                updateFocusedMonth(selectedMonth);
-              },
-              child: const Icon(Icons.refresh),
-            ),
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: () {
+            //     updateFocusedMonth(selectedMonth);
+            //   },
+            //   child: const Icon(Icons.refresh),
+            // ),
           );
         });
   }
@@ -112,13 +115,3 @@ class _MonthPickedState extends State<MonthPicked> {
   }
 }
 
-/// Hàm tính tổng các chi tiêu trong tháng
-// class CategoryCashFlowInMonth {
-//   ListData listData;
-//   DateTime selectedMonth;
-//   CategoryCashFlowInMonth({required this.listData, required this.selectedMonth});
-//
-//   Map<CategoryType, int> calculateCategoryCashFlowInMonth() {
-//
-//   }
-// }

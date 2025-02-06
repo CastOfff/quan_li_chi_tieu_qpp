@@ -144,4 +144,42 @@ class CalendarLogic {
       'Balance': balance,
     };
   }
+  /// Hàm tổng hợp các giao dịch theo loại
+  Map<bool, Map<CategoryType, int>> calculateCategorySummary(ListData listData, DateTime selectedMonth) {
+    Map<CategoryType, int> incomeTotals = {};
+    Map<CategoryType, int> expenseTotals = {};
+
+    for (var cashFlow in listData.data) {
+      if (cashFlow.date.year == selectedMonth.year && cashFlow.date.month == selectedMonth.month) {
+        if (cashFlow.isIncome == true) {
+          incomeTotals[cashFlow.category] = (incomeTotals[cashFlow.category] ?? 0) + cashFlow.amount!;
+        } else {
+          expenseTotals[cashFlow.category] = (expenseTotals[cashFlow.category] ?? 0) + cashFlow.amount!;
+        }
+      }
+    }
+    return {true: incomeTotals, false: expenseTotals};
+  }
+  // Map<CategoryType, Map<String, int>> calculateMonthCategory(ListData listData, DateTime selectedMonth) {
+  //   final Map<CategoryType, Map<String, int>> categoryExpenseSummary = {};
+  //   final Map<CategoryType, Map<String, int>> categoryIncomeSummary = {};
+  //
+  //   for (final transaction in listData.data) {
+  //     if (transaction.date.year == selectedMonth.year && transaction.date.month == selectedMonth.month) {
+  //       // Sử dụng ??= để khởi tạo giá trị ban đầu nếu chưa tồn tại
+  //       categoryExpenseSummary[transaction.category] ??= {'CategoryExpense': 0};
+  //       categoryIncomeSummary[transaction.category] ??= {'CategoryIncome': 0};
+  //
+  //       if (transaction.isIncome == true) {
+  //         categoryIncomeSummary['CategoryIncome'] = (categoryIncomeSummary['CategoryIncome'] ?? 0) + transaction.amount!;
+  //       } else {
+  //         categoryExpenseSummary['CategoryExpense'] = (categoryExpenseSummary['CategoryExpense'] ?? 0) + transaction.amount!;
+  //       }
+  //     }
+  //   }
+  //
+  //   return categorySummary;
+  // }
 }
+
+
